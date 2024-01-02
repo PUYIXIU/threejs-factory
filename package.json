@@ -3,5 +3,11 @@
     "cannon-es": "^0.20.0",
     "dat.gui": "^0.7.9",
     "three": "^0.133.0"
+  },
+  "devDependencies": {
+    "parcel-reporter-static-files-copy": "^1.5.3"
+  },
+  "staticFiles":{
+    "staticOutPath":"assets"
   }
 }

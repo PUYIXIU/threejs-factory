@@ -2,5 +2,8 @@
   "dependencies": {
     "parcel": "^2.10.3",
     "three": "^0.133.0"
+  },
+  "staticFiles":{
+    "staticOutPath":"assets"
   }
 }
