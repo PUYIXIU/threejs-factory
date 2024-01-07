@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding:0;
+      margin:0;
+    }
+    body{
+      position:relative;
+    }
+    .progress-layer{
+      
+      background-color: #000000d2;
+      width: 100%;
+      height:100vh;
+      position:absolute;
+      top:0;
+      left:0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .progress-content{
+      text-align: center;
+    }
+    .progress-text{
+      color:#fff;
+      font-size:20px;
+      font-family: fantasy;
+      letter-spacing: 0.2rem;
+      margin-bottom:5px;
+      /* margin-bottom:5px; */
+    }
+    #loading-progress{
+      height:20px;
+      width:300px;
+      appearance: none;
+    }
+    #loading-progress::-webkit-progress-bar{
+      background-color: #ffffff;
+      border-radius: 5px;
+      padding:5px;
+    }
+    #loading-progress::-webkit-progress-value{
+      background-image:repeating-linear-gradient(
+        -45deg,
+      #000000 0px, 
+      #000000 5px, 
+        #ffaa00 5px,
+        #ffaa00 10px
+        );
+        border-radius: 3px 5px 5px 3px;
+        transition:all 0.1s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-layer">
+    <div class="progress-content">
+      <div class="progress-text">Loading...</div>
+      <progress id="loading-progress" value="0" max="100" />
+    </div>
+  </div>
+  <script type="module" src="js/scripts.js"></script>
+</body>
+</html>

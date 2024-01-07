@@ -3,13 +3,14 @@
     "cannon-es": "^0.20.0",
     "dat.gui": "^0.7.9",
     "gsap": "^3.12.4",
-    "three": "^0.133.0",
+    "parcel": "^2.11.0",
+    "three": "^0.160.0",
     "yuka": "^0.7.8"
-  },
-  "devDependencies": {
-    "parcel-reporter-static-files-copy": "^1.5.3"
   },
   "staticFiles": {
     "staticOutPath": "assets"
+  },
+  "devDependencies": {
+    "parcel-reporter-static-files-copy": "^1.5.3"
   }
 }

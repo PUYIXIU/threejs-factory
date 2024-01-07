@@ -1,0 +1,11 @@
+Model Information:
+* title:	Still life with Orange
+* source:	https://sketchfab.com/3d-models/still-life-with-orange-4fc1350e7c544fb99a715a22770fb9b5
+* author:	Shahriar Shahrabi (https://sketchfab.com/shahriyarshahrabi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Still life with Orange" (https://sketchfab.com/3d-models/still-life-with-orange-4fc1350e7c544fb99a715a22770fb9b5) by Shahriar Shahrabi (https://sketchfab.com/shahriyarshahrabi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
