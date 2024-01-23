@@ -21,7 +21,6 @@ cssRenderer.domElement.style.left = '0'
 cssRenderer.domElement.style.pointerEvents = 'none'
 
 
-
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(

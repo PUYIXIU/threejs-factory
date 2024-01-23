@@ -9,9 +9,35 @@
       padding:0;
       margin:0;
     }
+    .label-p.hide{
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    .label-p{
+      transition-property: opacity , transform;
+      transition-duration:0.2s;
+      transform: translateY(-40px);
+      opacity: 1;
+      background: #3a3a3a;
+      color:#fff;
+      padding:10px;
+      position:relative;
+    }
+    .label-p::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      left: 50%;
+      bottom: -15px;
+      transform: rotateZ(45deg) translateX(-50%);
+      background: #3a3a3a;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
-  <script type="module" src="js/scripts.js"></script>
+<!--  <script type="module" src="js/scripts.js"></script>-->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
