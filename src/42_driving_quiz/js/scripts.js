@@ -186,7 +186,7 @@ const directionLight = new THREE.DirectionalLight(0xffffff,1)
 scene.add(directionLight)
 
 const clock = new THREE.Clock()
-const time = new YUKA.Time()mixer
+const time = new YUKA.Time()
 function animate() {
     const delta = time.update().getDelta()
     entityManager.update(delta)
