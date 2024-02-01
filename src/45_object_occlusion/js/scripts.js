@@ -79,37 +79,91 @@ groundMesh.rotation.x = Math.PI/2
 groundMesh.position.y = -2
 
 const loader = new GLTFLoader()
+let doorLeft, doorRight
 loader.load('assets/bathroom_door_frame.glb',gltf=>{
-    const model = gltf.scene
-    model.scale.set(0.006,0.006,0.006)
-    model.traverse(m=>m.castShadow = true)
-    model.position.x = 4
-    scene.add(model)
-    const model_2 = SkeletonUtils.clone(model)
-    model_2.position.x = -4
-    scene.add(model_2)
+    doorRight = gltf.scene
+    doorRight.scale.set(0.006,0.006,0.006)
+    doorRight.traverse(m=>{
+        if(m.isObject3D){
+            m.castShadow = true
+        }
+    })
+    doorRight.position.x = 4
+    scene.add(doorRight)
+    doorLeft = SkeletonUtils.clone(doorRight)
+    doorLeft.position.x = -4
+    scene.add(doorLeft)
+
+    doorLeft.randerOrder = 0
+    doorRight.randerOrder = 0
 })
 
-let mixer
-loader.load('assets/Wizard.gltf',gltf=>{
+function addModel(gltf, animateName, initX=0, startAt=0, timeScale=1){
     const model = gltf.scene
     model.scale.set(0.6,0.6,0.6)
     scene.add(model)
-    model.traverse(m=>m.castShadow = true)
+    model.traverse(m=>{
+        if(m.isObject3D){m.castShadow = true}
+        if(m.isMesh){m.renderOrder = 2}}
+    )
+    model.position.x = initX
     model.rotation.y = -Math.PI/2
-    mixer = new THREE.AnimationMixer(model)
+    const mixer = new THREE.AnimationMixer(model)
     const action = mixer.clipAction(
-        THREE.AnimationClip.findByName(gltf.animations, "Run_Weapon")
+        THREE.AnimationClip.findByName(gltf.animations, animateName)
     )
     action.play()
+    action.startAt(startAt)
+    action.timeScale = timeScale
 
+    return [model, mixer]
+}
+
+let wizard_mixer , wizard_model
+let cleric_mixer , cleric_model
+let monk_mixer , monk_model
+loader.load('assets/Wizard.gltf',gltf=>{
+    [wizard_model, wizard_mixer] = addModel(gltf, 'Run_Weapon')
 })
+loader.load('assets/Cleric.gltf',gltf=>{
+    [cleric_model, cleric_mixer] = addModel(gltf, 'Run',3,0.3,1.1)
+})
+loader.load('assets/Monk.gltf',gltf=>{
+    [monk_model, monk_mixer] = addModel(gltf, 'Run',-3,0.5,0.9)
+})
+
+// 添加两侧门的遮罩盒
+function addNoWriteBox(position){
+    const boxGeo = new THREE.BoxGeometry(8,4,2)
+    const boxMat = new THREE.MeshBasicMaterial({color:0xffffff})
+    const boxMesh = new THREE.Mesh(boxGeo,boxMat)
+    scene.add(boxMesh)
+    boxMesh.position.set(...position)
+    boxMesh.material.colorWrite = false
+    return boxMesh
+}
+const boxLeft = addNoWriteBox([-8, 2,0])
+const boxRight = addNoWriteBox([8, 2,0])
+boxLeft.renderOrder = 1
+boxRight.renderOrder = 1
+
 
 const clock = new THREE.Clock()
 function animate() {
     const delta = clock.getDelta()
-    if(mixer)
-        mixer.update(delta)
+    function runMixer(model, mixer){
+        if(mixer){
+            mixer.update(delta)
+            if(model.position.x > -5){
+                model.position.x -= 0.05
+            }else{
+                model.position.x = 5
+            }
+        }
+    }
+    runMixer(wizard_model, wizard_mixer)
+    runMixer(cleric_model, cleric_mixer)
+    runMixer(monk_model, monk_mixer)
     renderer.render(scene, camera);
 }
 
