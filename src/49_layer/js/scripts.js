@@ -69,8 +69,41 @@ const blueSphere = new THREE.Mesh(
 scene.add(blueSphere)
 blueSphere.position.set(4,0,0)
 
+// 创建一个新的Layer
+const myLayers = new THREE.Layers()
+myLayers.set(6) // 设置Layer的层级
+
+const guiConfig = {
+    redLayer:0,
+    greenLayer:0,
+    blueLayerEnableAll:false,
+    camera_0_enable:true,
+    camera_1_enable:false,
+    camera_2_enable:false,
+    camera_3_enable:false,
+}
+
 const gui = new GUI()
-gui.add()
+gui.add(guiConfig, 'camera_0_enable').onChange(val=>val?camera.layers.enable(0):camera.layers.disable(0))
+gui.add(guiConfig, 'camera_1_enable').onChange(val=>val?camera.layers.enable(1):camera.layers.disable(1))
+gui.add(guiConfig, 'camera_2_enable').onChange(val=>val?camera.layers.enable(2):camera.layers.disable(2))
+gui.add(guiConfig, 'camera_3_enable').onChange(val=>val?camera.layers.enable(3):camera.layers.disable(3))
+
+gui.add(guiConfig, 'redLayer', [0, 1, 2, 3]).onChange(val=>{
+    redSphere.layers.set(val)
+})
+gui.add(guiConfig, 'greenLayer', [0, 1, 2, 3]).onChange(val=>{
+    greenSphere.layers.set(val)
+})
+
+gui.add(guiConfig,'blueLayerEnableAll').onChange(val=>{
+    if(val){
+        blueSphere.layers.enableAll()
+    }else{
+        blueSphere.layers.disableAll()
+        blueSphere.layers.set(0)
+    }
+})
 
 function animate() {
     renderer.render(scene, camera);
