@@ -26,8 +26,8 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(-20, 25, 50);
 camera.lookAt(0,0,0)
 
-// const orbit = new OrbitControls(camera, renderer.domElement)
-// orbit.update()
+const orbit = new OrbitControls(camera, renderer.domElement)
+orbit.update()
 
 const renderScene = new RenderPass(scene, camera)
 const effectComposer = new EffectComposer(renderer)
@@ -40,32 +40,32 @@ const unrealBloomPass = new UnrealBloomPass(
 )
 effectComposer.addPass(unrealBloomPass)
 
-const startBtn = document.getElementById('start-btn')
-const titleContainer = document.querySelector('.title-container')
-startBtn.onclick = e=>{
-    const tl = gsap.timeline()
-    tl.to(startBtn,{
-        autoAlpha:0,
-        y:'-=20',
-        duration:0.2
-    })
-    .to(titleContainer,{
-        autoAlpha:0,
-        y:'-20',
-        duration:0.5
-    },0)
-    .to(camera.position,{
-        x:1.6,
-        y:5,
-        z:13,
-        duration:3,
-        onUpdate:()=>camera.lookAt(
-            chara_model_group.position.x,
-            chara_model_group.position.y,
-            chara_model_group.position.z
-        )
-    },0)
-}
+// const startBtn = document.getElementById('start-btn')
+// const titleContainer = document.querySelector('.title-container')
+// startBtn.onclick = e=>{
+//     const tl = gsap.timeline()
+//     tl.to(startBtn,{
+//         autoAlpha:0,
+//         y:'-=20',
+//         duration:0.2
+//     })
+//     .to(titleContainer,{
+//         autoAlpha:0,
+//         y:'-20',
+//         duration:0.5
+//     },0)
+//     .to(camera.position,{
+//         x:1.6,
+//         y:5,
+//         z:13,
+//         duration:3,
+//         onUpdate:()=>camera.lookAt(
+//             chara_model_group.position.x,
+//             chara_model_group.position.y,
+//             chara_model_group.position.z
+//         )
+//     },0)
+// }
 
 const loadingManager = new THREE.LoadingManager()
 const progressBarContainer = document.querySelector('.progress-bar-container')

@@ -26,6 +26,22 @@
         gl_FragColor = (texture2D(baseTexture, vUv) + vec4(1.0) * texture2D(bloomTexture, vUv));
     }
 </script>
+
+<script type="x-vertex" id="v-shader">
+    varying vec2 vUv;
+    void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+</script>
+<script type="x-fragment" id="f-shader">
+    varying vec2 vUv;
+    uniform sampler2D baseTexture;
+    uniform sampler2D bloomTexture;
+    void main(){
+        gl_FragColor = (texture2D(baseTexture, vUv) + vec4(1.0)*texture2D(bloomTexture, vUv));
+    }
+</script>
 <script type="module" src="js/scripts.js"></script>
 </body>
 </html>
