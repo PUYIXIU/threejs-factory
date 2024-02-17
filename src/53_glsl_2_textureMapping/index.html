@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+      *{
+          margin: 0;
+          padding:0;
+      }
+  </style>
+</head>
+<body>
+  <script type="x-vertex" id="v-shader">  
+    varying vec2 vUv;
+    void main(){
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  </script>
+  <script type="x-fragment" id="f-shader">
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    uniform float u_time;
+    uniform sampler2D image;
+    varying vec2 vUv;
+    void main(){
+      vec2 st = gl_FragCoord.xy/u_resolution;
+      vec4 texture = texture2D(image, st);
+      gl_FragColor = vec4(vec3(texture), 1.0);
+    }
+  </script>
+  <script type="module" src="js/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+  </style>
+</head>
+<body>
+  <script src="js/scripts.js" type="module"></script>
+  <script type="x-vertex" id="v-shader">
+    void main(){
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  </script>
+  <script type="x-fragment" id="f-shader">
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    void main(){
+      vec2 st = gl_FragCoord.xy/u_resolution;
+      float c = 1.0 - distance(st, u_mouse);
+      float color = pow(c, 10.0);
+      gl_FragColor = vec4(vec3(color), 1.0);
+    }
+  </script>
+</body>
+</html>
