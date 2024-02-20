@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+    </style>
+</head>
+<body>
+<script type="x-vertex" id="v-shader">
+    varying vec2 vUv;
+    void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+</script>
+<script type="x-fragment" id="f-shader">
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    uniform float u_time;
+    uniform sampler2D image;
+    uniform sampler2D golconda;
+    varying vec2 vUv;
+
+    vec2 rotate(vec2 uv, float rotation){
+        return vec2(
+            cos(rotation) * uv.x + sin(rotation) * uv.y,
+            cos(rotation) * uv.y - sin(rotation) * uv.x
+        );
+    }
+
+    void main(){
+        vec2 vUv2 = vUv;
+        vec2 vUv = vUv;
+
+        vUv -= vec2(0.5);
+        vec2 vUv_rotate = rotate(vUv, u_time);
+        vUv_rotate += vec2(0.5);
+
+        vec4 textureColor = texture2D(image, vUv_rotate);
+        vec4 imageTexture = texture2D(golconda, vUv2);
+        gl_FragColor = vec4(vec3(imageTexture), textureColor.r);
+    }
+</script>
+<script type="module" src="js/scripts.js"></script>
+</body>
+</html>
