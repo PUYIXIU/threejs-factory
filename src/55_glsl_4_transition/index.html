@@ -12,6 +12,29 @@
     </style>
 </head>
 <body>
+<script type="x-vertex" id="v-shader">
+    varying vec2 vUv;
+    void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(vec3(position), 1.0);
+    }
+</script>
+<script type="x-fragment" id="f-shader">
+    uniform sampler2D image;
+    uniform sampler2D image2;
+    uniform sampler2D transition;
+    uniform float mixRatio;
+    varying vec2 vUv;
+    void main(){
+        vec4 transitionTexel = texture2D(transition, vUv);
+        vec4 i1Texel = texture2D(image, vUv);
+        vec4 i2Texel = texture2D(image2, vUv);
+
+        float r = mixRatio * 1.6 - 0.3;
+        float mixF = clamp((transitionTexel.r - r) * 3.33, 0.0, 1.0);
+        gl_FragColor = mix(i1Texel, i2Texel, mixF);
+    }
+</script>
 <script type="module" src="js/scripts.js"></script>
 </body>
 </html>
