@@ -1,13 +1,10 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {TrackballControls} from "three/examples/jsm/controls/TrackballControls";
-
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Sets the color of the background
-renderer.setClearColor(0x000000);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -29,7 +26,7 @@ controls2.noZoom = false
 controls2.zoomSpeed = 1.5
 
 // Camera positioning
-camera.position.set(0, 0, 5);
+camera.position.set(0, 0, 8);
 controls1.update();
 controls2.update()
 
