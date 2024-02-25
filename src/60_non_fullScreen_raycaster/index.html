@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    body{
+      width:100vw;
+      height:100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #282828;
+    }
+    #render-box{
+      border: 1px solid #ff9b00;
+      width: 600px;
+      height: 600px;
+      background-color: aqua;
+    }
+  </style>
+</head>
+<body>
+  <script type="x-vertex" id="v-shader">
+    varying vec2 vUv;
+    void main(){
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  </script>
+  <script type="x-fragment" id="f-shader">
+    varying vec2 vUv;
+    uniform sampler2D baseTexture;
+    uniform sampler2D bloomTexture;
+    void main(){
+      vec4 baseColor = texture2D(baseTexture, vUv);
+      vec4 bloomColor = texture2D(bloomTexture, vUv);
+      gl_FragColor = baseColor + vec4(1.0)*bloomColor;
+    }
+  </script> 
+  <script type="module" src="js/scripts.js"></script>
+  <div id="render-box"></div>
+</body>
+</html>

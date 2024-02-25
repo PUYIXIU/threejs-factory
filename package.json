@@ -5,6 +5,7 @@
     "gsap": "^3.12.4",
     "parcel": "^2.11.0",
     "three": "^0.160.0",
+    "three-custom-shader-material": "^5.4.0",
     "yuka": "^0.7.8"
   },
   "staticFiles": {
