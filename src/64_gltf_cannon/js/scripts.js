@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as CANNON from 'cannon-es'
-import CannonUtils from "../utils/cannonUtils";
+import { threeToCannon, ShapeType } from 'three-to-cannon';
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -43,6 +43,7 @@ const planeMat = new THREE.MeshBasicMaterial({
     color:0xffffff,
 })
 const planeMesh = new THREE.Mesh(planeGeo, planeMat)
+planeMesh.rotation.x = Math.PI/2
 scene.add(planeMesh)
 
 const planeBody = new CANNON.Body({
@@ -58,32 +59,44 @@ scene.add(aLight)
 const loader = new GLTFLoader()
 let key,keyBody
 loader.load('assets/key.glb',gltf=>{
-    key = gltf.scene
-    key.scale.set(0.005,0.005,0.005)
-    scene.add(key)
-    const keyMesh = key.getObjectByName('Object_2')
-    // debugger
-    // const keyShape = CannonUtils.CreateConvexPolyhedron(
-    //     keyMesh.geometry
-    // )
+    key = gltf.scene.getObjectByName('Object_2')
+    // key.scale.set(0.005,0.005,0.005)
+    // key.scale.set(0.005,0.005,0.005)
+    scene.add(gltf.scene)
     keyBody = new CANNON.Body({
         mass:1,
         position:new CANNON.Vec3(0,3,0)
     })
-    const geo = keyMesh.geometry
-    debugger
-    const vertices = geo.vertices.map(v=>new CANNON.Vec3().copy(v))
-    const faces = geo.faces.map(f=>[f.a, f.b, f.c])
-    const normals = geo.faces.map(f=>new CANNON.Vec3().copy(f.
-    ))
+    const geo = key.geometry
+    const scaledVertices = []
+    let vertices = geo.attributes.position.array
+    for (let i = 0; i < vertices.length; i += 3) { 
+        scaledVertices.push(
+            vertices[i] * 0.005,
+            vertices[i+1] * 0.005 + 3,
+            vertices[i+2] * 0.005,
+        )
+    }
+    key.geometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(scaledVertices),3))
+    const keyShape = new CANNON.Trimesh(scaledVertices, geo.index.array)
 
-    const keyShape = new CANNON.ConvexPolyhedron({
-        vertices,
-        faces,
-        normals
+    // debugger
+    const newGeo = new THREE.BufferGeometry()
+    newGeo.setAttribute('position', new THREE.BufferAttribute(
+        keyShape.vertices,3
+    ))
+    newGeo.setIndex(
+        new THREE.BufferAttribute(keyShape.indices,1)
+    )
+    const newMat = new THREE.MeshBasicMaterial({
+        wireframe: true,
+        color:0xff0000
     })
+    const newMesh = new THREE.Mesh(newGeo, newMat)
+    scene.add(newMesh)
     keyBody.addShape(keyShape)
-    keyBody.quaternion.setFromEuler(Math.PI/3,0,0)
+
+    // keyBody.quaternion.setFromEuler(Math.PI/2,0,0)
     world.addBody(keyBody)
 })
 
@@ -93,7 +106,7 @@ function animate() {
     if(keyBody){
         planeMesh.position.copy(planeBody.position)
         planeMesh.quaternion.copy(planeBody.quaternion)
-
+        console.log(keyBody.position)
         key.position.copy(keyBody.position)
         key.quaternion.copy(keyBody.quaternion)
     }
