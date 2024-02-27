@@ -52,6 +52,7 @@ const textureLoader = new THREE.TextureLoader()
 
 const loader = new GLTFLoader()
 let model
+// 加载城市
 loader.load('assets/sporting_village.glb', gltf => {
     model = gltf.scene
     scene.add(model)
@@ -68,6 +69,34 @@ let tower
 loader.load('assets/telecommunication_tower_low-poly_free.glb',gltf=>{
     tower = gltf.scene
     tower.scale.set(0.1,0.1,0.1)
+})
+
+const points = [
+    new THREE.Vector3(-5,1,-5),
+    new THREE.Vector3(-5,3,3),
+    new THREE.Vector3(5,5,5),
+    new THREE.Vector3(10,3,-1),
+    new THREE.Vector3(3,2,-8),
+]
+const path = new THREE.CatmullRomCurve3(points,true)
+const pathGeo = new THREE.BufferGeometry().setFromPoints(path.getPoints(50))
+const pathMat = new THREE.LineBasicMaterial({color:0xffaa00})
+const pathMesh = new THREE.Line(pathGeo, pathMat)
+scene.add(pathMesh)
+
+// 加载直升飞机
+let helicopte
+let mixer
+loader.load('assets/helicopter.glb',gltf=>{
+    helicopte = gltf.scene
+    helicopte.scale.set(0.2,0.2,0.2)
+    helicopte.position.set(0,1,0)
+    scene.add(helicopte)
+    mixer = new THREE.AnimationMixer(helicopte)
+    const action = mixer.clipAction(
+        THREE.AnimationClip.findByName(gltf.animations, 'Rotation')
+    )
+    action.play()
 })
 
 window.onmousemove = e =>{
@@ -106,6 +135,7 @@ window.onkeydown = e =>{
         const intersections = raycaster.intersectObject(model)
         if(intersections[0]){
             const point = intersections[0].point
+            console.log(point)
             let group = new THREE.Group()
             let t = SkeletonUtils.clone(tower)
             scene.add(group)
@@ -144,6 +174,22 @@ window.onkeydown = e =>{
     }
 }
 
+// 直升飞机点位
+const helicopterIconMat = new THREE.ShaderMaterial({
+    uniforms,
+    transparent:true,
+    vertexShader:document.getElementById('v-shader').textContent,
+    fragmentShader:document.getElementById('f-shader-2').textContent,
+})
+const helicopterIconGeo = new THREE.CircleGeometry(5,20)
+const helicopterIconMesh = new THREE.Mesh(helicopterIconGeo, helicopterIconMat)
+helicopterIconMesh.position.y = 1
+helicopterIconMesh.rotation.x = -Math.PI/2
+helicopterIconMesh.layers.disable(0)
+helicopterIconMesh.layers.enable(1)
+scene.add(helicopterIconMesh)
+
+// 加载小地图
 const mapTexture = textureLoader.load('assets/painting/MiniMap.png')
 mapTexture.colorSpace = THREE.SRGBColorSpace
 const planeGeo = new THREE.PlaneGeometry(40,40)
@@ -161,7 +207,18 @@ planeMesh.layers.disable(0)
 planeMesh.layers.enable(1)
 
 const clock = new THREE.Clock()
-function animate() {
+function animate(time) {
+    if(mixer){
+        mixer.update(clock.getDelta())
+        const t = (time/2000 % 10) /10
+        const position = path.getPointAt(t)
+        const tangent = path.getTangentAt(t)
+        helicopte.position.copy(position)
+        helicopte.lookAt(
+            position.clone().add(tangent)
+        )
+        helicopterIconMesh.position.copy(position)
+    }
     uniforms.u_time.value = clock.getElapsedTime()
     controls.update();
     renderer.render(scene, camera);

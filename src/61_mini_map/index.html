@@ -57,6 +57,18 @@
   }
 </script>
 
+<script type="x-fragment" id="f-shader-2">
+  varying vec2 vUv;
+  uniform float u_time;
+  void main(){
+    vec2 vUv = vUv;
+    float distance = distance(vec2(0.5), vUv);
+    // fract 取小数部分
+    float color = fract(distance * 10.0 - u_time) / distance / 20.0;
+    gl_FragColor = vec4(vec3(1.0, 0.0, 0.0), color);
+  }
+</script>
+
 <script type="module" src="js/scripts.js"></script>
 </body>
 </html>
