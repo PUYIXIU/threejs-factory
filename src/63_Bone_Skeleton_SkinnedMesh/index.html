@@ -5,12 +5,67 @@
     <title>Title</title>
     <style>
         *{
+            /*margin:0;*/
+            /*padding:0;*/
+        }
+        body{
+            width: 100%;
+            height: 100vh;
             margin:0;
             padding:0;
+            position:relative;
+        }
+        #riddle{
+            transition:all 0.3s ease;
+            position:absolute;
+            bottom:1.5rem;
+            left:1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index:2;
+            background: #7f4ba72e;
+            box-shadow: 0 0 10px #9c8353;
+            padding:20px 20px;
+            pointer-events: none;
+            line-height:20px;
+            font-weight: 12px;
+        }
+        #riddle .word{
+            color: #fcff835e;
+            text-shadow: 0 0 16px #ffe072b8;
+            font-weight: bold;
+            font-family: fangsong;
+        }
+        #tip{
+            transition:all 0.3s ease;
+            opacity: 0;
+            padding: 20px;
+            font-size:24px;
+            background: #2218358a;
+            color: #e6e58e;
+            text-shadow: 0px 0px 10px #fa4ea1;
+            font-family: fangsong;
+            box-shadow: 0px 0px 10px #6a5332;
+            pointer-events: none;
+            z-index:2;
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translateX(-50%) translateY(-50%);
         }
     </style>
 </head>
 <body>
+<div id="riddle">
+    <div class="word">亘古不变的地球</div>
+    <div class="word">海王星与它面对面遥望</div>
+    <div class="word">海水逆流，大地瞬息，交界处是土星</div>
+    <div class="word">土星长久凝视天王星</div>
+</div>
+<div id="tip">
+    <div class="tip-word">蛇夫座的钥匙</div>
+</div>
 <script src="js/scripts.js" type="module"></script>
 </body>
 </html>
